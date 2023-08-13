@@ -1,0 +1,63 @@
+A. While Loop Statements:
+Q) To calculate area of circle between radius value from 3 to 7. Store the result in areas table.
+
+create table areas
+(
+radius number(3),
+area number(10,2)
+);
+
+Declare
+	radius number(3):=3;
+	area number(10,2);
+	pi constant number(4,2):=3.14;
+Begin
+	while(radius<=7)
+	Loop
+		area:=pi*power(radius,2);
+		insert into areas values(radius,area);
+		radius:=radius+1;
+	End Loop;
+End;
+/
+
+select * from areas;
+
+B. For Loop Statements:
+Q) To accept a string and print it reverse.
+DECLARE
+	given_str varchar2(10);
+	str_len number(3);
+	rev_str varchar2(10);
+BEGIN
+	given_str:='&given_str';
+	str_len:=length(given_str);
+	for cntr in reverse 1..str_len
+	LOOP
+	rev_str:=rev_str||substr(given_str,cntr,1);
+	END LOOP;
+	dbms_output.put_line('Given String = '||given_str);
+	dbms_output.put_line('Reverse String = '||rev_str);
+END;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

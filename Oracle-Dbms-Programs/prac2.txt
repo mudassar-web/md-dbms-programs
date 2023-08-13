@@ -1,0 +1,155 @@
+Aim : Writing PL/SQL Blocks with basic programming constructs by including following:
+a) If...then...Else, IF...ELSIF...ELSE... END IF
+b) Case statement
+
+a) 1) Write a PL/SQL block to accept an employee from the user.
+If that employee is a female, add 5 years to the age. 
+If that employee is a male, add 3 years to the age.
+
+* Create the empl table with appropriate columns
+create table empl
+(
+	eno NUMBER(3),
+	ename varchar2(25),
+	doj DATE,
+	eage NUMBER(3),
+	egender CHAR(1),
+	esalary NUMBER(8,2)
+);
+
+* Insert suitable records in the table
+insert into empl values(101,'Aaron','12-FEB-2011',23,'M',25000);
+insert into empl values(102,'Betty','11-JUN-2012',22,'F',25000);
+insert into empl values(103,'Charlie','25-DEC-2009',27,'M',38000);
+insert into empl values(104,'Danny','22-DEC-2012',22,'M',26000);
+insert into empl values(105,'Eliza','09-SEP-2011',25,'F',38000);
+
+* Inserting a record directly on the console (Dynamic Query)
+insert into empl values(&eno,'&ename','&doj',&eage,'&egender',&esalary);
+(Press / to re-run the above query again)
+
+* Write the PL/SQL block
+
+SET SERVEROUTPUT ON;
+DECLARE
+	meno NUMBER(3);
+	mgender CHAR(1);
+	mage NUMBER(3);
+BEGIN
+	meno:=&meno;
+	select egender,eage into mgender,mage from empl where eno=meno;
+	DBMS_OUTPUT.PUT_LINE('Emp No:'||meno|| ' is '||mgender||
+' and is '||mage||' years old.');
+	IF mgender='F' THEN
+		update empl set eage=eage+5 where eno=meno;
+	END IF;
+	IF mgender='M' THEN
+		update empl set eage=eage+3 where eno=meno;
+	END IF;
+END;
+/ 
+
+a) 2) Write a PL/SQL block to accept an employee from the user. 
+Extract the employee salary from the table.
+If the salary is 40000 or less, print 'LOW INCOME'.
+If the salary is more than 40000 but less than or equal to 70000, print 'AVERAGE INCOME'.
+If the salary is more than 70000 but less than or equal to 150000, print 'MODERATE INCOME'.
+Else print 'HIGH INCOME'.
+
+* Empl from previous code can be used
+
+*  Write the PL/SQL block
+SET SERVEROUTPUT ON;
+DECLARE
+	meno NUMBER(3);
+	msalary NUMBER(8,2);	
+BEGIN
+	meno:=&meno;
+	select esalary into msalary from empl where eno=meno;
+	DBMS_OUTPUT.PUT_LINE('You salary is '||msalary);
+	IF msalary<=40000 THEN
+		DBMS_OUTPUT.PUT_LINE('LOW INCOME');
+	ELSIF msalary>40000 AND msalary<=70000 THEN
+		DBMS_OUTPUT.PUT_LINE('AVERAGE INCOME');
+	ELSIF msalary>70000 AND msalary<=150000 THEN
+		DBMS_OUTPUT.PUT_LINE('MODERATE INCOME');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('HIGH INCOME');
+	END IF;
+END;
+/
+
+b) 1) Write a PL/SQL block to accept an employee from the user. Check the date of joining for the employee and display th corresponding month name using CASE statement.
+
+* Empl from previous code can be used
+
+* SYNTAX for CASE statement
+
+	CASE selector
+		WHEN val1 THEN <>
+		WHEN val2 THEN <>
+		.
+		.
+		.
+		.
+		ELSE <>
+	END CASE;
+Note: if val1,val2 are not numbers, then use quotes.
+	Example: WHEN 'val1' THEN <>
+
+* Write the Pl/SQL block
+SET SERVEROUTPUT ON;
+DECLARE
+	meno NUMBER(3);
+	mmonth NUMBER(2);
+	mmonthname VARCHAR2(15);
+BEGIN
+	meno:=&meno;
+	select extract(month from doj) into mmonth from empl where eno=meno;
+	CASE mmonth
+		WHEN 1 THEN mmonthname:='January';
+		WHEN 2 THEN mmonthname:='February';
+		WHEN 3 THEN mmonthname:='March';
+		WHEN 4 THEN mmonthname:='April';
+		WHEN 5 THEN mmonthname:='May';
+		WHEN 6 THEN mmonthname:='June';
+		WHEN 7 THEN mmonthname:='July';
+		WHEN 8 THEN mmonthname:='August';
+		WHEN 9 THEN mmonthname:='September';
+		WHEN 10 THEN mmonthname:='October';
+		WHEN 11 THEN mmonthname:='November';
+		WHEN 12 THEN mmonthname:='December';
+		ELSE mmonthname:='Invalid Month';
+	END CASE;
+	DBMS_OUTPUT.PUT_LINE('Your Joining Month is: '||mmonthname);
+END;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

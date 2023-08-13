@@ -1,0 +1,110 @@
+A. Write a fuction o display your name in uppercase
+
+create function myupperfn
+return varchar2
+IS
+myvar varchar2(50);
+BEGIN
+select upper('mudassar ansari') into myvar from dual;
+return myvar;
+END;
+/
+
+PL/SQL BLOCK:
+DECLARE
+mystr varchar2(50);
+BEGIN
+mystr:=myupperfn();
+dbms_output.put_line('UPPERCASE STRING: '||mystr);
+END;
+/
+
+B. Write a fuction to convert give string into uppercase.
+
+create or replace function myupperfn(str varchar2)
+return varchar2
+IS
+myvar varchar2(50);
+BEGIN
+select upper(str) into myvar from dual;
+return myvar;
+END;
+/
+
+DECLARE
+mystr varchar2(50);
+myword varchar2(50);
+BEGIN
+myword:='&myword';
+mystr:=myupperfn(myword);
+dbms_output.put_line('UPPERCASE STRING: '||mystr);
+END;
+/
+
+
+C. Write q function to count no. of employees in a table.
+
+create table empl
+(
+eno NUMBER(3),
+ename VARCHAR2(50),
+eage NUMBER(3),
+egender CHAR(1),
+esal NUMBER(10,2)
+);
+
+insert into empl values(1,'Selena',19,'F',250000);
+
+insert into empl values(2,'Austin',23,'M',350000);
+
+insert into empl values(3,'Seraphina',22,'F',260000);
+
+insert into empl values(4,'Taylor',18,'F',255000);
+
+insert into empl values(5,'Shawn',21,'M',280000);
+
+create or replace function count_of_emp
+return number
+AS
+myvar NUMBER(4);
+BEGIN
+select count(*) into myvar from empl;
+return myvar;
+END;
+/
+
+DECLARE
+mynum NUMBER;
+BEGIN
+mynum:=count_of_emp();
+dbms_output.put_line('Number of employees: '||mynum);
+END;
+/
+
+D. Write a function to calculate factorial of a given number.
+
+create or replace function fact(n number)
+return number
+AS
+f number;
+BEGIN 
+if(n=0) then
+f:=1;
+ELSE
+f:=n*fact(n-1);
+END IF;
+return f;
+END;
+/
+
+DECLARE
+num NUMBER;
+num1 NUMBER;
+BEGIN
+num1:=&num;
+num:=fact(num1);
+dbms_output.put_line(num1||' != '||num1);
+END;
+/
+
+select fact(7) as "Factoiral" from dual;

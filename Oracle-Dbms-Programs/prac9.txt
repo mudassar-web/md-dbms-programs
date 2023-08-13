@@ -1,0 +1,48 @@
+Study of Transactions and Locks.
+
+A. Study of transactions.
+
+declare vaddr varchar2(10);
+begin
+vaddr:='&vaddr';
+if vaddr='mirard' then
+update empm set salary=salary+(salary*0.1)
+where address=vaddr;
+else
+update empm set salary=salary+(salary*0.2)
+where address=vaddr;
+end if;
+savepoint updatesal;
+update empm set salary=salary-200 where address=vaddr;
+if vaddr='mirard' then rollback to updatesal;
+else
+commit;
+end if;
+end;
+/
+
+B. Study of Locks.
+
+1. Create new user [naming convention according to oracle 11g].
+create user c##tmp identified by temp;
+
+2. grant permission
+grant dba to c##tmp with admin option;
+
+3. View table emp from both user.
+A]On ur user:
+select * from emp;
+
+B]On tmp user:
+select * from c##md.emp;
+
+4. Lock table emp from owner.
+lock table emp in exclusive mode nowait;
+
+5. Update any record in empm from tmp user.
+select * from c##md.emp for update nowait;
+
+update c##md.empm set ename='Lily' where empid='106';
+
+6. Release the lock from your user and perform update from tmp user.
+commit;

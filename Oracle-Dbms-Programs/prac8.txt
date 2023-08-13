@@ -1,0 +1,114 @@
+
+Creating and working with Insert/Update/Delete Trigger using Before/After clause.
+
+A. Create Trigger which will not allows us to add records in tables on specific date and time.
+
+create table emp(
+empid varchar2(3) primary key,
+ename varchar2(20),
+address varchar2(15),
+salary number(8,2),
+doj date
+);
+
+insert into emp values('101','James','mirard',20000,'11-may-2001' );
+
+insert into emp values('102','Charles','kandivali',20000,'12-may-2009' );
+
+insert into emp values('103','Duke','mirard',19000,'13-may-2001' );
+
+insert into emp values('104','Selena','mirard',10000,'15-may-2001' );
+
+insert into emp values('105','Sherin','mirard',10000,'21-may-2001' );
+
+create or replace trigger empsecure BEFORE INSERT OR UPDATE OR DELETE on emp
+BEGIN
+if (TO_CHAR(sysdate,'HH24:MI') NOT BETWEEN '14:15' AND '18:30') 
+THEN
+dbms_output.put_line('Emp table is secured!!!!');
+RAISE_APPLICATION_ERROR(-20500,'table is secured');
+END IF;
+END;
+/
+
+Trigger created.
+
+SQL> insert into emp values('106','Jasmine','mirard',10000,'21-may-2001' );
+insert into emp values('106','Jasmine','mirard',10000,'21-may-2001' )
+            *
+ERROR at line 1:
+ORA-20500: table is secured
+ORA-06512: at "C##MD.EMPSECURE", line 5
+ORA-04088: error during execution of trigger 'C##MD.EMPSECURE'
+
+SQL> update emp set ename='James Bond' where empid='101';
+Emp table is secured!!!!
+update emp set ename='James Bond' where empid='101'
+       *
+ERROR at line 1:
+ORA-20500: table is secured
+ORA-06512: at "C##MD.EMPSECURE", line 5
+ORA-04088: error during execution of trigger 'C##MD.EMPSECURE'
+
+
+SQL> delete from emp where empid='103';
+Emp table is secured!!!!
+delete from emp where empid='103'
+            *
+ERROR at line 1:
+ORA-20500: table is secured
+ORA-06512: at "C##MD.EMPSECURE", line 5
+ORA-04088: error during execution of trigger 'C##MD.EMPSECURE'
+
+SQL> alter trigger empsecure enable;
+
+Trigger altered.
+
+SQL> alter trigger empsecure disable;
+
+Trigger altered.
+
+B. Create Trigger which will logs changes done to emp table.
+
+create table emptrans
+(
+empid number(3),
+ename varchar2(20),
+opttype varchar2(10),
+optdate date,
+uname varchar2(10)
+);
+
+create or replace trigger empreplicate after delete or insert or update on emp for each row
+BEGIN
+if deleting then
+ insert into emptrans values(:old.eid,:old.ename,'deleted',sysdate,user);
+elsif inserting then
+ insert into emptrans values(:new.eid,:new.ename,'inserted',sysdate,user);
+elsif updating then 
+ insert into emptrans values(:old.eid,:old.ename,'updated',sysdate,user);
+end if;
+end;
+/
+
+Trigger created.
+
+SQL> alter trigger empsecure disable;
+
+Trigger altered.
+
+SQL> insert into emp values('107','Rita','Mira Road');
+
+1 row inserted.
+
+SQL> delete from emp where eid='104';
+
+1 row deleted.
+
+SQL> update emp set ename='James Bond' where empid='101';
+
+1 row deleted.
+
+SQL> select * from emptrans;
+
+3 rows selected.

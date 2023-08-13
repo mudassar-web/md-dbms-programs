@@ -1,0 +1,36 @@
+Sequences
+
+A. Create a sequence as test sequence
+
+create sequence test_seq minvalue 1 maxvalue 100 increment by 1;
+
+select test_seq.currval from dual; 
+
+select test_seq.nextval from dual;
+
+alter sequence test_seq maxvalue 10 increment by 2;
+
+alter sequence test_seq maxvalue 15 increment by 1 cycle cache 5;
+
+
+B. Create a sequence rollno sequence to be used in stud table as a Primary Key value
+
+create table stud(
+studid varchar2(4) primary key,
+studname varchar2(20) not null,
+rollno number(2),
+class varchar2(10)
+);
+
+create sequence rollno start with 1 minvalue 1 maxvalue 100 increment by 1 cycle;
+
+insert into stud values('S'||rollno.nextval,'&studname','&rollno','&class');
+
+
+C. Create a sequence to have decreasing value in it.
+
+create sequence decreasing_seq minvalue 1 maxvalue 15 increment by -1;
+
+select decreasing_seq.currval from dual;
+
+select decreasing_seq.nextval from dual;

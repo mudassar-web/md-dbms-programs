@@ -1,0 +1,56 @@
+A. Procedure to display simple message
+
+create or replace procedure display
+is
+begin
+dbms_output.put_line('Hello sql plus');
+end;
+/
+
+to dislay the message:
+exec display;
+
+B. Procedure to accept a employee no. and print its specific details
+
+create table emp
+(
+empid NUMBER(3)  PRIMARY KEY,
+ename varchar2(30),
+eaddr varchar2(50)
+);
+
+insert into emp values('&empid','&ename','&eaddr');
+
+create or replace procedure empdetails(eid in NUMBER)
+is
+empname varchar2(30);
+empaddr varchar2(50);
+begin
+select ename,eaddr into empname,empaddr from emp where empid=eid;
+dbms_output.put_line('Emp ID: '||eid);
+dbms_output.put_line('Emp NAME: '||empname);
+dbms_output.put_line('Emp Address: '||empaddr);
+end;
+/
+
+exec empdetails(&eid);
+
+C. Procedure to accept a employee no. and print its specific details
+
+create table areas
+(
+radius number(3),
+area number(7,2)
+);
+
+create or replace procedure procareas(rad in number)
+is 
+pi constant number(3,2):=3.14;
+area1 number(7,2);
+begin
+area1:=pi*power(rad,2);
+insert into areas values(rad,area1) ;
+end;
+/
+
+exec procareas(&rad);
