@@ -5,3 +5,11 @@
 ### Note : All programs are created on Oracle 11g
 
 ### For any further queries contact : mudassar.ansari@gmail.com
+
+## Authors
+
+- [@mudassar-web](https://github.com/mudassar-web)
+
+## License
+
+[MIT License](LICENSE)
